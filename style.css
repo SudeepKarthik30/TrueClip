@@ -7,9 +7,14 @@
     --accent-secondary: #2596be; /* Logo Blue */
     --accent-highlight: #9b59b6; /* Logo Purple (for potential future use) */
     --light-text: #F0F0F0;
-    --subtitle-color: #898989;
+    --subtitle-color: #9a9a9a; /* Lightened slightly from #898989 for better readability on dark bg */
     --dark-text: #101010;
     --card-bg: #1A1A1A;
+}
+
+/* Anchored sections should not be hidden behind the fixed navbar when jumped to */
+section[id] {
+    scroll-margin-top: 110px;
 }
 
 /* GLOBAL STYLES */
@@ -144,6 +149,32 @@ a:hover {
     margin-right: 25px;
 }
 
+/* MOBILE NAV COLLAPSE - give the dropdown menu a solid, readable surface */
+@media (max-width: 991.98px) {
+    .custom-navbar .navbar-collapse {
+        background: rgba(16, 16, 16, 0.97);
+        backdrop-filter: blur(12px);
+        border-radius: 12px;
+        margin-top: 12px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .custom-navbar .navbar-nav {
+        text-align: center;
+    }
+
+    .custom-navbar .navbar-nav .nav-item {
+        margin-right: 0;
+        margin-bottom: 12px;
+    }
+
+    .custom-navbar .btn-get-started {
+        width: 100%;
+        margin: 8px 0 0;
+    }
+}
+
 /* HERO SECTION */
 .hero {
     position: relative;
@@ -269,7 +300,7 @@ a:hover {
 #services .section-heading {
     font-weight: 700;
     color: var(--accent-secondary); /* Logo Blue */
-    font-size: 3.5rem;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
     margin-bottom: 20px;
 }
 
@@ -514,7 +545,7 @@ a:hover {
 #stats-section h2 {
     font-weight: 700;
     color: var(--accent-secondary); /* Logo Blue */
-    font-size: 3rem;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
     margin-bottom: 30px;
 }
 
@@ -549,7 +580,7 @@ a:hover {
 #why-us .section-heading {
     font-weight: 700;
     color: var(--accent-secondary); /* Logo Blue */
-    font-size: 3rem;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
     margin-bottom: 20px;
 }
 
@@ -617,7 +648,7 @@ a:hover {
 #contact .heading-container h2 {
     font-weight: 700;
     color: var(--accent-secondary); /* Logo Blue */
-    font-size: 3rem;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
 }
 
 #contact .heading-container p {
@@ -879,3 +910,153 @@ textarea::placeholder {
     }
 }
 
+/* BRANDS WE'VE WORKED WITH SECTION */
+#brands h2 span {
+    color: var(--light-text);
+}
+
+.brands-marquee-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;
+}
+
+.brands-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: brandsMarquee 30s linear infinite;
+}
+
+.brands-marquee-container:hover .brands-marquee-track {
+    animation-play-state: paused;
+}
+
+@keyframes brandsMarquee {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.brand-logo-item {
+    flex-shrink: 0;
+    width: 200px;
+    height: 110px;
+    margin: 0 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.brand-logo-item:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.brand-logo-item img {
+    max-width: 75%;
+    max-height: 65%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* Subtle black fade on both ends of the logo row */
+.brands-marquee-container::before,
+.brands-marquee-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 140px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.brands-marquee-container::before {
+    left: 0;
+    background: linear-gradient(to right, var(--dark-bg), rgba(16, 16, 16, 0));
+}
+
+.brands-marquee-container::after {
+    right: 0;
+    background: linear-gradient(to left, var(--dark-bg), rgba(16, 16, 16, 0));
+}
+
+@media (max-width: 767px) {
+    .brand-logo-item {
+        width: 130px;
+        height: 80px;
+        margin: 0 12px;
+    }
+
+    .brands-marquee-container::before,
+    .brands-marquee-container::after {
+        width: 60px;
+    }
+}
+
+/* BACK TO TOP BUTTON */
+#back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--accent-primary); /* Logo Green, matches close-video-btn convention */
+    color: var(--dark-text);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
+    z-index: 999;
+}
+
+#back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#back-to-top:hover {
+    background-color: #82d977; /* Lighter green, matches btn-submit hover */
+    transform: translateY(-3px);
+}
+
+@media (max-width: 767px) {
+    #back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 42px;
+        height: 42px;
+    }
+}
+
+/* SCROLL-REVEAL (progressive enhancement: only applied once JS confirms it can animate back in) */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
