@@ -225,3 +225,61 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         });
+
+// NAVBAR SCROLLED STATE
+// Toggles the .scrolled class (already styled in style.css) so the fixed
+// navbar gains a solid, readable background once the hero is scrolled past.
+document.addEventListener('DOMContentLoaded', () => {
+    const navbar = document.querySelector('.custom-navbar');
+    if (!navbar) return;
+
+    const toggleNavbarBackground = () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 60);
+    };
+
+    toggleNavbarBackground();
+    window.addEventListener('scroll', toggleNavbarBackground, { passive: true });
+});
+
+// BACK TO TOP BUTTON
+document.addEventListener('DOMContentLoaded', () => {
+    const backToTopBtn = document.getElementById('back-to-top');
+    if (!backToTopBtn) return;
+
+    const toggleBackToTop = () => {
+        backToTopBtn.classList.toggle('visible', window.scrollY > 500);
+    };
+
+    toggleBackToTop();
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});
+
+// SCROLL-REVEAL FOR CARDS
+// Progressive enhancement only: the 'reveal-on-scroll' class is added here in JS,
+// so if JS fails to load the cards simply render fully visible (no broken layout).
+document.addEventListener('DOMContentLoaded', () => {
+    const revealTargets = document.querySelectorAll(
+        '.service-card, .reason-card, .stats-card, .contact-card'
+    );
+    if (!revealTargets.length) return;
+
+    revealTargets.forEach((el, index) => {
+        el.classList.add('reveal-on-scroll');
+        el.style.transitionDelay = `${(index % 4) * 0.08}s`;
+    });
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    revealTargets.forEach(el => revealObserver.observe(el));
+});
